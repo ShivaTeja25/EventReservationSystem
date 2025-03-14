@@ -16,4 +16,9 @@ public class DataService {
         return dataRepo.findAll();
 
     }
+
+    public String registerEvent(EventData event) {
+         dataRepo.save(event);
+         return "Success";
+    }
 }
