@@ -12,6 +12,10 @@ public class DataService {
 
     @Autowired
     DataRepo dataRepo;
+
+    @Autowired
+    MailService mailService;
+
     public List<EventData> getEvents() {
         return dataRepo.findAll();
 
@@ -19,6 +23,7 @@ public class DataService {
 
     public String registerEvent(EventData event) {
          dataRepo.save(event);
-         return "Success";
+         mailService.sendEventNotification(event);
+         return "Registration Success and sent email to media center";
     }
 }
