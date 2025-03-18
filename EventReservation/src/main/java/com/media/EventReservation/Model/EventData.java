@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 
 @Entity
 @Data
@@ -30,35 +33,32 @@ public class EventData {
     private String wifiAccess;
     private String extraInformation;
 
-    public EventData() {
-        this.eventName = "Default Event";
-        this.hostName = "Default Host";
-        this.hostEmail = "default@example.com";
-        this.eventLocation = "Default Location";
-        this.deptName = "Default Department";
-        this.micsNeeded = "No";
-        this.recording = "No";
-        this.eventType = "In-Person";
-        this.computerAsst = "No";
-        this.conferenceTool = "None";
-        this.wifiAccess = "No";
-        this.extraInformation = "No additional info";
-    }
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
-
-    public EventData(String eventName, String hostName, String hostEmail, String eventLocation, String recording, String eventType, String micsNeeded, String deptName, String computerAsst, String conferenceTool, String wifiAccess, String extraInformation) {
+    public EventData(String eventName, String hostName, String hostEmail, String deptName, String eventLocation, String micsNeeded, String eventType, String recording, String computerAsst, String wifiAccess, String extraInformation, String conferenceTool, LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
         this.eventName = eventName;
         this.hostName = hostName;
         this.hostEmail = hostEmail;
-        this.eventLocation = eventLocation;
-        this.recording = recording;
-        this.eventType = eventType;
-        this.micsNeeded = micsNeeded;
         this.deptName = deptName;
+        this.eventLocation = eventLocation;
+        this.micsNeeded = micsNeeded;
+        this.eventType = eventType;
+        this.recording = recording;
         this.computerAsst = computerAsst;
-        this.conferenceTool = conferenceTool;
         this.wifiAccess = wifiAccess;
         this.extraInformation = extraInformation;
+        this.conferenceTool = conferenceTool;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public EventData() {
+
     }
 
     public String getEventName() {
@@ -101,14 +101,6 @@ public class EventData {
         this.deptName = deptName;
     }
 
-    public String getMicsNeeded() {
-        return micsNeeded;
-    }
-
-    public void setMicsNeeded(String micsNeeded) {
-        this.micsNeeded = micsNeeded;
-    }
-
     public String getRecording() {
         return recording;
     }
@@ -123,6 +115,14 @@ public class EventData {
 
     public void setEventType(String eventType) {
         this.eventType = eventType;
+    }
+
+    public String getMicsNeeded() {
+        return micsNeeded;
+    }
+
+    public void setMicsNeeded(String micsNeeded) {
+        this.micsNeeded = micsNeeded;
     }
 
     public String getComputerAsst() {
@@ -156,4 +156,40 @@ public class EventData {
     public void setExtraInformation(String extraInformation) {
         this.extraInformation = extraInformation;
     }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
+    }
+
+
+
+
 }

@@ -41,6 +41,10 @@ public class MailService {
                             "Conference Tool: " + event.getConferenceTool() + "\n" +
                             "WiFi Access: " + event.getWifiAccess() + "\n" +
                             "Extra Information: " + event.getExtraInformation() + "\n\n" +
+                            "Start Date: " + event.getStartDate() + "\n" +
+                            "Start Time: " + event.getStartTime() + "\n" +
+                            "End Date: " + event.getEndDate() + "\n" +
+                            "End Time: " + event.getEndTime() + "\n" +
                             "Please review and take necessary action.", false
             );
 
