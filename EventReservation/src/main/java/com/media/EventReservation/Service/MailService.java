@@ -6,6 +6,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+
 @Service
 public class MailService {
     private final JavaMailSender mailSender;
@@ -27,26 +32,31 @@ public class MailService {
             helper.setFrom(fromEmail);
             helper.setTo(ADMIN_EMAIL);
             helper.setSubject("New Event Request: " + event.getEventName());
-            helper.setText(
-                    "A new event request has been submitted.\n\n" +
-                            "Event Name: " + event.getEventName() + "\n" +
-                            "Host Name: " + event.getHostName() + "\n" +
-                            "Host Email: " + event.getHostEmail() + "\n" +
-                            "Location: " + event.getEventLocation() + "\n" +
-                            "Department: " + event.getDeptName() + "\n" +
-                            "Mics Needed: " + event.getMicsNeeded() + "\n" +
-                            "Recording: " + event.getRecording() + "\n" +
-                            "Event Type: " + event.getEventType() + "\n" +
-                            "Computer Assistance: " + event.getComputerAsst() + "\n" +
-                            "Conference Tool: " + event.getConferenceTool() + "\n" +
-                            "WiFi Access: " + event.getWifiAccess() + "\n" +
-                            "Extra Information: " + event.getExtraInformation() + "\n\n" +
-                            "Start Date: " + event.getStartDate() + "\n" +
-                            "Start Time: " + event.getStartTime() + "\n" +
-                            "End Date: " + event.getEndDate() + "\n" +
-                            "End Time: " + event.getEndTime() + "\n" +
-                            "Please review and take necessary action.", false
-            );
+
+            String startUtc = formatDateTimeToUTC(event.getStartDate(), event.getStartTime());
+            String endUtc = formatDateTimeToUTC(event.getEndDate(), event.getEndTime());
+
+            String calendarUrl = generateGoogleCalendarLink(event, startUtc, endUtc);
+
+            String emailContent = "<p>A new event request has been submitted.</p>" +
+                    "<ul>" +
+                    "<li><strong>Event Name:</strong> " + event.getEventName() + "</li>" +
+                    "<li><strong>Host Name:</strong> " + event.getHostName() + "</li>" +
+                    "<li><strong>Host Email:</strong> " + event.getHostEmail() + "</li>" +
+                    "<li><strong>Location:</strong> " + event.getEventLocation() + "</li>" +
+                    "<li><strong>Department:</strong> " + event.getDeptName() + "</li>" +
+                    "<li><strong>Start Date:</strong> " + event.getStartDate() + "</li>" +
+                    "<li><strong>End Date:</strong> " + event.getEndDate() + "</li>" +
+                    "<li><strong>Start Time:</strong> " + event.getStartTime() + "</li>" +
+                    "<li><strong>End Time:</strong> " + event.getEndTime() + "</li>" +
+                    "</ul>" +
+                    "<p><a href='" + calendarUrl + "' target='_blank' " +
+                    "style='display: inline-block; padding: 10px 15px; background-color: #007bff; " +
+                    "color: white; text-decoration: none; font-weight: bold; border-radius: 5px;'>" +
+                    "➕ Add to Google Calendar</a></p>" +
+                    "<p>Please review and take necessary action.</p>";
+
+            helper.setText(emailContent, true);
 
             mailSender.send(message);
             System.out.println("Email sent successfully to " + ADMIN_EMAIL);
@@ -55,6 +65,28 @@ public class MailService {
             e.printStackTrace();
         }
     }
+    private String formatDateTimeToUTC(LocalDateTime dateTime) {
+        ZonedDateTime utcTime = dateTime.atZone(ZoneOffset.systemDefault()).withZoneSameInstant(ZoneOffset.UTC);
+        return utcTime.format(DateTimeFormatter.ofPattern("yyyyMMdd'T'HHmmss'Z'"));
+    }
 
+    private String formatDateTimeToUTC(LocalDate date, LocalTime time) {
+        LocalDateTime dateTime = LocalDateTime.of(date, time);
+        return formatDateTimeToUTC(dateTime);
+    }
+
+    private String generateGoogleCalendarLink(EventData event, String startUtc, String endUtc) {
+        String baseUrl = "https://calendar.google.com/calendar/r/eventedit?";
+        return baseUrl +
+                "text=" + encode(event.getEventName()) +
+                "&dates=" + startUtc + "/" + endUtc +
+                "&details=" + encode("Host: " + event.getHostName() + " (" + event.getHostEmail() + ")\n" +
+                "Additional Info: " + event.getExtraInformation()) +
+                "&location=" + encode(event.getEventLocation());
+    }
+
+    private String encode(String value) {
+        return URLEncoder.encode(value, StandardCharsets.UTF_8);
+    }
 
 }
