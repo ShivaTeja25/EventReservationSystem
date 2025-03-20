@@ -45,6 +45,12 @@ public class MailService {
                     "<li><strong>Host Email:</strong> " + event.getHostEmail() + "</li>" +
                     "<li><strong>Location:</strong> " + event.getEventLocation() + "</li>" +
                     "<li><strong>Department:</strong> " + event.getDeptName() + "</li>" +
+                    "<li><strong>Computer Assistance:</strong> " + event.getComputerAsst() + "</li>" +
+                    "<li><strong>Event Type:</strong> " + event.getEventType() + "</li>" +
+                    "<li><strong>Mics Needed:</strong> " + event.getMicsNeeded() + "</li>" +
+                    "<li><strong>Record the Event:</strong> " + event.getRecording() + "</li>" +
+                    "<li><strong>Wifi Access Needed:</strong> " + event.getWifiAccess() + "</li>" +
+                    "<li><strong>Additional Information:</strong> " + event.getExtraInformation() + "</li>" +
                     "<li><strong>Start Date:</strong> " + event.getStartDate() + "</li>" +
                     "<li><strong>End Date:</strong> " + event.getEndDate() + "</li>" +
                     "<li><strong>Start Time:</strong> " + event.getStartTime() + "</li>" +
