@@ -1,13 +1,22 @@
+name: event-reservation-app
 services:
   db:
-    image: postgres:13-alpine
+    image: postgres
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: eventdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data     
     ports:
       - "5432:5432"
-
+  #adminer
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
   spring-boot-app:
     build: ./EventReservation
     environment:
@@ -19,3 +28,7 @@ services:
       - "8080:8080"
     depends_on:
       - db
+  
+volumes:
+  pgdata:
+    driver: local
