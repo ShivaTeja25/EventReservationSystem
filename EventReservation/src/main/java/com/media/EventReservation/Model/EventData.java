@@ -57,9 +57,6 @@ public class EventData {
         this.endTime = endTime;
     }
 
-    public EventData() {
-
-    }
 
     public String getEventName() {
         return eventName;
