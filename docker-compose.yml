@@ -1,7 +1,7 @@
 name: event-reservation-app
 services:
   db:
-    image: postgres
+    image: postgres:17-bookworm
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -28,6 +28,16 @@ services:
       - "8080:8080"
     depends_on:
       - db
+  frontend:
+    build: ./frontend
+    
+    environment:
+      REACT_APP_API_URL: http://localhost:8080,
+      NODE_ENV: production
+    ports:
+      - "8000:3000"
+    depends_on:
+      - spring-boot-app
   
 volumes:
   pgdata:
