@@ -24,6 +24,15 @@ The Event Reservation System is a full-stack application that allows users to re
 
 ## Running the Application
 
+### Initial Setup 
+
+go to `EventReservation/src/main/resources/application.properties` and change to match yours
+- spring.mail.username=${MAIL_USERNAME:}
+- spring.mail.password=${MAIL_PASSWORD:}
+
+CHange the `ADMIN_EMAIL` variable from the `EventReservation/src/main/java/com/media/EventReservation/Service/MailService.java` file
+
+
 ### Using Docker
 To run the entire application (frontend, backend, and database) using Docker:
 
