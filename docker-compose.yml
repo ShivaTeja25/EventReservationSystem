@@ -1,0 +1,44 @@
+name: event-reservation-app
+services:
+  db:
+    image: postgres:17-bookworm
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: eventdata
+    volumes:
+      - pgdata:/var/lib/postgresql/data     
+    ports:
+      - "5432:5432"
+  #adminer
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8080"
+  spring-boot-app:
+    build: ./EventReservation
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/eventdata
+      PRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  frontend:
+    build: ./frontend
+    
+    environment:
+      REACT_APP_API_URL: http://localhost:8080,
+      NODE_ENV: production
+    ports:
+      - "8000:3000"
+    depends_on:
+      - spring-boot-app
+  
+volumes:
+  pgdata:
+    driver: local
